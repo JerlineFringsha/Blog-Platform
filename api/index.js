@@ -21,9 +21,20 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
-mongoose.connect(
-  "mongodb+srv://mongo:mongo@cluster0.vbjwdik.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-);
+// mongoose.connect(
+//   "mongodb+srv://mongo:mongo@cluster0.vbjwdik.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+// );
+
+
+const mongoURI = process.env.MONGODB_URI || "mongodb+srv://mongo:mongo@cluster0.vbjwdik.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+});
+
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
